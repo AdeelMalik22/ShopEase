@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Register - ShopEase{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow">
+            <div class="card-body p-4">
+                <div class="text-center mb-4">
+                    <i class="bi bi-person-plus display-4 text-primary"></i>
+                    <h2 class="mt-2">Create Account</h2>
+                    <p class="text-muted">Join ShopEase today</p>
+                </div>
+
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    {% if next %}
+                    <input type="hidden" name="next" value="{{ next }}">
+                    {% endif %}
+                    {{ form|crispy }}
+
+                    <button type="submit" class="btn btn-primary btn-lg w-100 mt-3">
+                        <i class="bi bi-person-plus me-2"></i>Create Account
+                    </button>
+                </form>
+
+                <hr class="my-4">
+
+                <p class="text-center mb-0">
+                    Already have an account?
+                    <a href="{% url 'accounts:login' %}{% if next %}?next={{ next }}{% endif %}" class="text-decoration-none">Login here</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

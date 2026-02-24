@@ -1,0 +1,60 @@
+<footer class="bg-dark text-light py-5 mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <h5 class="mb-3"><i class="bi bi-shop me-2"></i>ShopEase</h5>
+                <p class="text-muted">Your one-stop shop for quality products. We offer the best deals on a wide range of items.</p>
+                <div class="d-flex gap-3">
+                    <a href="#" class="text-light"><i class="bi bi-facebook fs-5"></i></a>
+                    <a href="#" class="text-light"><i class="bi bi-twitter-x fs-5"></i></a>
+                    <a href="#" class="text-light"><i class="bi bi-instagram fs-5"></i></a>
+                    <a href="#" class="text-light"><i class="bi bi-linkedin fs-5"></i></a>
+                </div>
+            </div>
+
+            <div class="col-md-2 mb-4">
+                <h6 class="mb-3">Quick Links</h6>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="{% url 'products:home' %}" class="text-muted text-decoration-none">Home</a></li>
+                    <li class="mb-2"><a href="{% url 'products:product_list' %}" class="text-muted text-decoration-none">Products</a></li>
+                    <li class="mb-2"><a href="{% url 'cart:cart_detail' %}" class="text-muted text-decoration-none">Cart</a></li>
+                </ul>
+            </div>
+
+            <div class="col-md-2 mb-4">
+                <h6 class="mb-3">Account</h6>
+                <ul class="list-unstyled">
+                    {% if user.is_authenticated %}
+                    <li class="mb-2"><a href="{% url 'accounts:profile' %}" class="text-muted text-decoration-none">Profile</a></li>
+                    <li class="mb-2"><a href="{% url 'accounts:order_history' %}" class="text-muted text-decoration-none">Orders</a></li>
+                    {% else %}
+                    <li class="mb-2"><a href="{% url 'accounts:login' %}" class="text-muted text-decoration-none">Login</a></li>
+                    <li class="mb-2"><a href="{% url 'accounts:register' %}" class="text-muted text-decoration-none">Register</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <h6 class="mb-3">Contact Us</h6>
+                <ul class="list-unstyled text-muted">
+                    <li class="mb-2"><i class="bi bi-geo-alt me-2"></i>123 Commerce St, City, ST 12345</li>
+                    <li class="mb-2"><i class="bi bi-envelope me-2"></i>support@shopease.com</li>
+                    <li class="mb-2"><i class="bi bi-phone me-2"></i>(555) 123-4567</li>
+                </ul>
+            </div>
+        </div>
+
+        <hr class="my-4 border-secondary">
+
+        <div class="row align-items-center">
+            <div class="col-md-6 text-center text-md-start">
+                <p class="mb-0 text-muted">&copy; 2024 ShopEase. All rights reserved.</p>
+            </div>
+            <div class="col-md-6 text-center text-md-end">
+                <img src="https://cdn.jsdelivr.net/gh/lipis/flag-icons@6.6.6/flags/4x3/us.svg" width="30" alt="US" class="me-2">
+                <span class="text-muted">USD</span>
+            </div>
+        </div>
+    </div>
+</footer>
+

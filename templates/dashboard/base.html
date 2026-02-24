@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard - ShopEase{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-0">
+    <!-- Dashboard Top Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'dashboard:index' %}">
+                <i class="bi bi-speedometer2 me-2"></i>Admin Dashboard
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#dashboardNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="dashboardNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}" href="{% url 'dashboard:index' %}">
+                            <i class="bi bi-house me-1"></i>Overview
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'product' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'dashboard:product_list' %}">
+                            <i class="bi bi-box-seam me-1"></i>Products
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'category' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'dashboard:category_list' %}">
+                            <i class="bi bi-grid me-1"></i>Categories
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'order' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'dashboard:order_list' %}">
+                            <i class="bi bi-receipt me-1"></i>Orders
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'user' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'dashboard:user_list' %}">
+                            <i class="bi bi-people me-1"></i>Users
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'products:home' %}">
+                            <i class="bi bi-shop me-1"></i>View Store
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'admin:index' %}">
+                            <i class="bi bi-gear me-1"></i>Django Admin
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container-fluid py-4">
+        {% block dashboard_content %}{% endblock %}
+    </main>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .stat-card {
+        transition: transform 0.2s;
+    }
+    .stat-card:hover {
+        transform: translateY(-5px);
+    }
+    #dashboardNav .nav-link.active {
+        background-color: rgba(255,255,255,0.1);
+        border-radius: 4px;
+    }
+</style>
+{% endblock %}
+

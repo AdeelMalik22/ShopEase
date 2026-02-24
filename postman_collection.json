@@ -1,0 +1,1045 @@
+{
+	"info": {
+		"_postman_id": "shopease-ecommerce-api",
+		"name": "ShopEase Ecommerce API",
+		"description": "Complete API collection for ShopEase Django Ecommerce Application",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://127.0.0.1:8000",
+			"type": "string"
+		},
+		{
+			"key": "csrf_token",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Get CSRF Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Extract CSRF token from cookies",
+									"var csrfToken = pm.cookies.get('csrftoken');",
+									"if (csrfToken) {",
+									"    pm.collectionVariables.set('csrf_token', csrfToken);",
+									"    console.log('CSRF Token saved:', csrfToken);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/accounts/login/",
+							"host": ["{{base_url}}"],
+							"path": ["accounts", "login", ""]
+						},
+						"description": "Get CSRF token by visiting login page. Run this first before other requests."
+					}
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-CSRFToken",
+								"value": "{{csrf_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "admin123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/accounts/login/",
+							"host": ["{{base_url}}"],
+							"path": ["accounts", "login", ""]
+						},
+						"description": "Login with username/email and password"
+					}
+				},
+				{
+					"name": "Login with Email",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-CSRFToken",
+								"value": "{{csrf_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "admin@shopease.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "admin123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/accounts/login/",
+							"host": ["{{base_url}}"],
+							"path": ["accounts", "login", ""]
+						}
+					}
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-CSRFToken",
+								"value": "{{csrf_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "newuser",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "newuser@example.com",
+									"type": "text"
+								},
+								{
+									"key": "first_name",
+									"value": "New",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "User",
+									"type": "text"
+								},
+								{
+									"key": "password1",
+									"value": "securepass123",
+									"type": "text"
+								},
+								{
+									"key": "password2",
+									"value": "securepass123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/accounts/register/",
+							"host": ["{{base_url}}"],
+							"path": ["accounts", "register", ""]
+						}
+					}
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-CSRFToken",
+								"value": "{{csrf_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/accounts/logout/",
+							"host": ["{{base_url}}"],
+							"path": ["accounts", "logout", ""]
+						}
+					}
+				},
+				{
+					"name": "Get Profile",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/accounts/profile/",
+							"host": ["{{base_url}}"],
+							"path": ["accounts", "profile", ""]
+						},
+						"description": "Get user profile (requires login)"
+					}
+				},
+				{
+					"name": "Password Reset Request",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-CSRFToken",
+								"value": "{{csrf_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "user@example.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/accounts/password-reset/",
+							"host": ["{{base_url}}"],
+							"path": ["accounts", "password-reset", ""]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "Get Homepage",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/",
+							"host": ["{{base_url}}"],
+							"path": [""]
+						}
+					}
+				},
+				{
+					"name": "Get All Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/products/",
+							"host": ["{{base_url}}"],
+							"path": ["products", ""]
+						}
+					}
+				},
+				{
+					"name": "Get Product Detail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/products/wireless-bluetooth-headphones/",
+							"host": ["{{base_url}}"],
+							"path": ["products", "wireless-bluetooth-headphones", ""]
+						},
+						"description": "Replace slug with actual product slug"
+					}
+				},
+				{
+					"name": "Get Products by Category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/category/electronics/",
+							"host": ["{{base_url}}"],
+							"path": ["category", "electronics", ""]
+						},
+						"description": "Replace 'electronics' with actual category slug"
+					}
+				},
+				{
+					"name": "Search Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/search/?q=phone",
+							"host": ["{{base_url}}"],
+							"path": ["search", ""],
+							"query": [
+								{
+									"key": "q",
+									"value": "phone"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Cart",
+			"item": [
+				{
+					"name": "View Cart",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/cart/",
+							"host": ["{{base_url}}"],
+							"path": ["cart", ""]
+						},
+						"description": "View shopping cart (requires login)"
+					}
+				},
+				{
+					"name": "Add to Cart",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-CSRFToken",
+								"value": "{{csrf_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "quantity",
+									"value": "2",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/cart/add/1/",
+							"host": ["{{base_url}}"],
+							"path": ["cart", "add", "1", ""]
+						},
+						"description": "Add product to cart. Replace '1' with product ID. Requires login."
+					}
+				},
+				{
+					"name": "Add to Cart (AJAX)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-CSRFToken",
+								"value": "{{csrf_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "X-Requested-With",
+								"value": "XMLHttpRequest",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "quantity",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/cart/add/1/",
+							"host": ["{{base_url}}"],
+							"path": ["cart", "add", "1", ""]
+						},
+						"description": "Add to cart via AJAX - returns JSON response"
+					}
+				},
+				{
+					"name": "Update Cart Item",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-CSRFToken",
+								"value": "{{csrf_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "quantity",
+									"value": "3",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/cart/update/1/",
+							"host": ["{{base_url}}"],
+							"path": ["cart", "update", "1", ""]
+						},
+						"description": "Update cart item quantity. Replace '1' with product ID."
+					}
+				},
+				{
+					"name": "Remove from Cart",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-CSRFToken",
+								"value": "{{csrf_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/cart/remove/1/",
+							"host": ["{{base_url}}"],
+							"path": ["cart", "remove", "1", ""]
+						},
+						"description": "Remove item from cart. Replace '1' with product ID."
+					}
+				}
+			]
+		},
+		{
+			"name": "Checkout & Orders",
+			"item": [
+				{
+					"name": "Get Checkout Page",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/checkout/",
+							"host": ["{{base_url}}"],
+							"path": ["checkout", ""]
+						},
+						"description": "Get checkout page (requires login and items in cart)"
+					}
+				},
+				{
+					"name": "Submit Checkout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-CSRFToken",
+								"value": "{{csrf_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "customer@example.com",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "555-123-4567",
+									"type": "text"
+								},
+								{
+									"key": "shipping_first_name",
+									"value": "John",
+									"type": "text"
+								},
+								{
+									"key": "shipping_last_name",
+									"value": "Doe",
+									"type": "text"
+								},
+								{
+									"key": "shipping_address1",
+									"value": "123 Main Street",
+									"type": "text"
+								},
+								{
+									"key": "shipping_address2",
+									"value": "Apt 4B",
+									"type": "text"
+								},
+								{
+									"key": "shipping_city",
+									"value": "New York",
+									"type": "text"
+								},
+								{
+									"key": "shipping_state",
+									"value": "NY",
+									"type": "text"
+								},
+								{
+									"key": "shipping_postal_code",
+									"value": "10001",
+									"type": "text"
+								},
+								{
+									"key": "shipping_country",
+									"value": "United States",
+									"type": "text"
+								},
+								{
+									"key": "billing_same_as_shipping",
+									"value": "true",
+									"type": "text"
+								},
+								{
+									"key": "notes",
+									"value": "Please deliver in the morning",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/checkout/",
+							"host": ["{{base_url}}"],
+							"path": ["checkout", ""]
+						},
+						"description": "Submit checkout form - creates order and redirects to payment"
+					}
+				},
+				{
+					"name": "Get Order History",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/accounts/orders/",
+							"host": ["{{base_url}}"],
+							"path": ["accounts", "orders", ""]
+						},
+						"description": "Get user's order history (requires login)"
+					}
+				},
+				{
+					"name": "Get Order Detail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/order/ORD-12345678/",
+							"host": ["{{base_url}}"],
+							"path": ["order", "ORD-12345678", ""]
+						},
+						"description": "Get order details. Replace 'ORD-12345678' with actual order number."
+					}
+				}
+			]
+		},
+		{
+			"name": "Payment (Stripe)",
+			"item": [
+				{
+					"name": "Create Checkout Session",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/payment/checkout/",
+							"host": ["{{base_url}}"],
+							"path": ["payment", "checkout", ""]
+						},
+						"description": "Creates Stripe checkout session and redirects to Stripe. Requires order in session."
+					}
+				},
+				{
+					"name": "Payment Success",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/payment/success/?session_id=cs_test_xxx",
+							"host": ["{{base_url}}"],
+							"path": ["payment", "success", ""],
+							"query": [
+								{
+									"key": "session_id",
+									"value": "cs_test_xxx"
+								}
+							]
+						},
+						"description": "Payment success callback from Stripe"
+					}
+				},
+				{
+					"name": "Payment Cancel",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/payment/cancel/",
+							"host": ["{{base_url}}"],
+							"path": ["payment", "cancel", ""]
+						},
+						"description": "Payment cancelled callback"
+					}
+				},
+				{
+					"name": "Stripe Webhook",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Stripe-Signature",
+								"value": "t=xxx,v1=xxx",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"type\": \"checkout.session.completed\",\n    \"data\": {\n        \"object\": {\n            \"id\": \"cs_test_xxx\",\n            \"payment_intent\": \"pi_xxx\"\n        }\n    }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/payment/webhook/",
+							"host": ["{{base_url}}"],
+							"path": ["payment", "webhook", ""]
+						},
+						"description": "Stripe webhook endpoint for payment events"
+					}
+				}
+			]
+		},
+		{
+			"name": "Admin Dashboard",
+			"item": [
+				{
+					"name": "Dashboard Home",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/dashboard/",
+							"host": ["{{base_url}}"],
+							"path": ["dashboard", ""]
+						},
+						"description": "Admin dashboard overview (requires admin login)"
+					}
+				},
+				{
+					"name": "List Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/dashboard/products/",
+							"host": ["{{base_url}}"],
+							"path": ["dashboard", "products", ""]
+						}
+					}
+				},
+				{
+					"name": "Add Product Page",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/dashboard/products/add/",
+							"host": ["{{base_url}}"],
+							"path": ["dashboard", "products", "add", ""]
+						}
+					}
+				},
+				{
+					"name": "Add Product",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-CSRFToken",
+								"value": "{{csrf_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "multipart/form-data",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Test Product",
+									"type": "text"
+								},
+								{
+									"key": "slug",
+									"value": "test-product",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "This is a test product description",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "29.99",
+									"type": "text"
+								},
+								{
+									"key": "compare_price",
+									"value": "39.99",
+									"type": "text"
+								},
+								{
+									"key": "stock",
+									"value": "100",
+									"type": "text"
+								},
+								{
+									"key": "is_active",
+									"value": "true",
+									"type": "text"
+								},
+								{
+									"key": "is_featured",
+									"value": "false",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": ""
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/dashboard/products/add/",
+							"host": ["{{base_url}}"],
+							"path": ["dashboard", "products", "add", ""]
+						}
+					}
+				},
+				{
+					"name": "Edit Product",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-CSRFToken",
+								"value": "{{csrf_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Updated Product Name",
+									"type": "text"
+								},
+								{
+									"key": "slug",
+									"value": "updated-product-name",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Updated description",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "34.99",
+									"type": "text"
+								},
+								{
+									"key": "stock",
+									"value": "50",
+									"type": "text"
+								},
+								{
+									"key": "is_active",
+									"value": "true",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/dashboard/products/1/edit/",
+							"host": ["{{base_url}}"],
+							"path": ["dashboard", "products", "1", "edit", ""]
+						},
+						"description": "Replace '1' with product ID"
+					}
+				},
+				{
+					"name": "Delete Product",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-CSRFToken",
+								"value": "{{csrf_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/dashboard/products/1/delete/",
+							"host": ["{{base_url}}"],
+							"path": ["dashboard", "products", "1", "delete", ""]
+						},
+						"description": "Replace '1' with product ID"
+					}
+				},
+				{
+					"name": "List Categories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/dashboard/categories/",
+							"host": ["{{base_url}}"],
+							"path": ["dashboard", "categories", ""]
+						}
+					}
+				},
+				{
+					"name": "Add Category",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-CSRFToken",
+								"value": "{{csrf_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "New Category",
+									"type": "text"
+								},
+								{
+									"key": "slug",
+									"value": "new-category",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Category description",
+									"type": "text"
+								},
+								{
+									"key": "is_active",
+									"value": "true",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": ""
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/dashboard/categories/add/",
+							"host": ["{{base_url}}"],
+							"path": ["dashboard", "categories", "add", ""]
+						}
+					}
+				},
+				{
+					"name": "List Orders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/dashboard/orders/",
+							"host": ["{{base_url}}"],
+							"path": ["dashboard", "orders", ""]
+						}
+					}
+				},
+				{
+					"name": "List Orders (Filtered by Status)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/dashboard/orders/?status=pending",
+							"host": ["{{base_url}}"],
+							"path": ["dashboard", "orders", ""],
+							"query": [
+								{
+									"key": "status",
+									"value": "pending"
+								}
+							]
+						},
+						"description": "Filter orders by status: pending, processing, shipped, delivered, cancelled"
+					}
+				},
+				{
+					"name": "Get Order Detail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/dashboard/orders/1/",
+							"host": ["{{base_url}}"],
+							"path": ["dashboard", "orders", "1", ""]
+						},
+						"description": "Replace '1' with order ID"
+					}
+				},
+				{
+					"name": "Update Order Status",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-CSRFToken",
+								"value": "{{csrf_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "status",
+									"value": "shipped",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/dashboard/orders/1/update-status/",
+							"host": ["{{base_url}}"],
+							"path": ["dashboard", "orders", "1", "update-status", ""]
+						},
+						"description": "Update order status. Values: pending, processing, shipped, delivered, cancelled"
+					}
+				},
+				{
+					"name": "List Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/dashboard/users/",
+							"host": ["{{base_url}}"],
+							"path": ["dashboard", "users", ""]
+						}
+					}
+				},
+				{
+					"name": "Get User Detail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/dashboard/users/1/",
+							"host": ["{{base_url}}"],
+							"path": ["dashboard", "users", "1", ""]
+						},
+						"description": "Replace '1' with user ID"
+					}
+				}
+			]
+		}
+	]
+}
+

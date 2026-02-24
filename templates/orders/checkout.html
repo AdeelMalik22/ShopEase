@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Checkout - ShopEase{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'products:home' %}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'cart:cart_detail' %}">Cart</a></li>
+        <li class="breadcrumb-item active">Checkout</li>
+    </ol>
+</nav>
+
+<h1 class="mb-4"><i class="bi bi-bag-check me-2"></i>Checkout</h1>
+
+<form method="POST" action="">
+    {% csrf_token %}
+
+    <div class="row">
+        <!-- Checkout Form -->
+        <div class="col-lg-8 mb-4">
+            <!-- Contact Information -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-person me-2"></i>Contact Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form.email|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.phone|as_crispy_field }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shipping Address -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-truck me-2"></i>Shipping Address</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form.shipping_first_name|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.shipping_last_name|as_crispy_field }}
+                        </div>
+                    </div>
+                    {{ form.shipping_address1|as_crispy_field }}
+                    {{ form.shipping_address2|as_crispy_field }}
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form.shipping_city|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.shipping_state|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form.shipping_postal_code|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.shipping_country|as_crispy_field }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Billing Address -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-credit-card me-2"></i>Billing Address</h5>
+                </div>
+                <div class="card-body">
+                    <div class="form-check mb-3">
+                        {{ form.billing_same_as_shipping }}
+                        <label class="form-check-label" for="id_billing_same_as_shipping">
+                            Same as shipping address
+                        </label>
+                    </div>
+
+                    <div id="billing-address-fields" style="display: none;">
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form.billing_first_name|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.billing_last_name|as_crispy_field }}
+                            </div>
+                        </div>
+                        {{ form.billing_address1|as_crispy_field }}
+                        {{ form.billing_address2|as_crispy_field }}
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form.billing_city|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.billing_state|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form.billing_postal_code|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.billing_country|as_crispy_field }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Notes -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-chat-text me-2"></i>Order Notes (Optional)</h5>
+                </div>
+                <div class="card-body">
+                    {{ form.notes|as_crispy_field }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="col-lg-4">
+            <div class="card sticky-top" style="top: 80px;">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-receipt me-2"></i>Order Summary</h5>
+                </div>
+                <div class="card-body">
+                    <!-- Cart Items -->
+                    <div class="mb-3">
+                        {% for item in cart %}
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div>
+                                <span class="fw-bold">{{ item.product.name|truncatewords:3 }}</span>
+                                <small class="text-muted d-block">Qty: {{ item.quantity }}</small>
+                            </div>
+                            <span>${{ item.total_price }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <hr>
+
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Subtotal</span>
+                        <span>${{ cart.get_total_price }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Shipping</span>
+                        <span class="text-success">Free</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Tax</span>
+                        <span>$0.00</span>
+                    </div>
+
+                    <hr>
+
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="fw-bold fs-5">Total</span>
+                        <span class="fw-bold fs-5 text-primary">${{ cart.get_total_price }}</span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg w-100">
+                        <i class="bi bi-lock me-2"></i>Continue to Payment
+                    </button>
+
+                    <div class="text-center mt-3">
+                        <small class="text-muted">
+                            <i class="bi bi-shield-check me-1"></i>Secure checkout powered by Stripe
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var billingCheckbox = document.getElementById('id_billing_same_as_shipping');
+    var billingFields = document.getElementById('billing-address-fields');
+
+    function toggleBillingFields() {
+        if (billingCheckbox.checked) {
+            billingFields.style.display = 'none';
+        } else {
+            billingFields.style.display = 'block';
+        }
+    }
+
+    billingCheckbox.addEventListener('change', toggleBillingFields);
+    toggleBillingFields();
+});
+</script>
+{% endblock %}
+

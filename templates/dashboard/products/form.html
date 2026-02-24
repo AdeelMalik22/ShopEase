@@ -1,0 +1,109 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}{{ title }} - Admin Dashboard{% endblock %}
+
+{% block dashboard_content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-box-seam me-2"></i>{{ title }}</h2>
+    <a href="{% url 'dashboard:product_list' %}" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-2"></i>Back to Products
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="mb-3">
+                        <label for="id_name" class="form-label">Product Name *</label>
+                        {{ form.name }}
+                        {% if form.name.errors %}<div class="text-danger small">{{ form.name.errors.0 }}</div>{% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_slug" class="form-label">Slug <small class="text-muted">(optional - auto-generates from name)</small></label>
+                        {{ form.slug }}
+                        <small class="text-muted">URL-friendly version of the name. Leave blank to auto-generate.</small>
+                        {% if form.slug.errors %}<div class="text-danger small">{{ form.slug.errors.0 }}</div>{% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_description" class="form-label">Description</label>
+                        {{ form.description }}
+                        {% if form.description.errors %}<div class="text-danger small">{{ form.description.errors.0 }}</div>{% endif %}
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label for="id_category" class="form-label">Category *</label>
+                        {{ form.category }}
+                        {% if form.category.errors %}<div class="text-danger small">{{ form.category.errors.0 }}</div>{% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_price" class="form-label">Price *</label>
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            {{ form.price }}
+                        </div>
+                        {% if form.price.errors %}<div class="text-danger small">{{ form.price.errors.0 }}</div>{% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_compare_price" class="form-label">Compare Price</label>
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            {{ form.compare_price }}
+                        </div>
+                        <small class="text-muted">Original price (for showing discount)</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_stock" class="form-label">Stock *</label>
+                        {{ form.stock }}
+                        {% if form.stock.errors %}<div class="text-danger small">{{ form.stock.errors.0 }}</div>{% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_image" class="form-label">Product Image</label>
+                        {% if product and product.image %}
+                        <div class="mb-2">
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-thumbnail" style="max-width: 150px;">
+                        </div>
+                        {% endif %}
+                        {{ form.image }}
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-check">
+                            {{ form.is_active }}
+                            <label class="form-check-label" for="id_is_active">Active (visible on store)</label>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-check">
+                            {{ form.is_featured }}
+                            <label class="form-check-label" for="id_is_featured">Featured Product</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-check-circle me-2"></i>{{ button_text }}
+                </button>
+                <a href="{% url 'dashboard:product_list' %}" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+

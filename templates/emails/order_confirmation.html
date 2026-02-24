@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Order Confirmation</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+
+    <h2 style="color: #28a745;">✓ Order Confirmed!</h2>
+
+    <p>Hi {{ order.shipping_first_name }},</p>
+
+    <p>Thank you for your order. We've received your payment and your order is being processed.</p>
+
+    <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
+
+    <h3>Order Details</h3>
+    <p>
+        <strong>Order Number:</strong> {{ order.order_number }}<br>
+        <strong>Date:</strong> {{ order.created_at|date:"F j, Y" }}<br>
+        <strong>Total:</strong> ${{ order.total }}
+    </p>
+
+    <h3>Items Ordered</h3>
+    <table style="width: 100%; border-collapse: collapse;">
+        {% for item in order.items.all %}
+        <tr>
+            <td style="padding: 8px 0; border-bottom: 1px solid #eee;">{{ item.product_name }} × {{ item.quantity }}</td>
+            <td style="padding: 8px 0; border-bottom: 1px solid #eee; text-align: right;">${{ item.subtotal }}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td style="padding: 8px 0;"><strong>Total</strong></td>
+            <td style="padding: 8px 0; text-align: right;"><strong>${{ order.total }}</strong></td>
+        </tr>
+    </table>
+
+    <h3>Shipping Address</h3>
+    <p>
+        {{ order.shipping_first_name }} {{ order.shipping_last_name }}<br>
+        {{ order.shipping_address1 }}<br>
+        {% if order.shipping_address2 %}{{ order.shipping_address2 }}<br>{% endif %}
+        {{ order.shipping_city }}, {{ order.shipping_state }} {{ order.shipping_postal_code }}<br>
+        {{ order.shipping_country }}
+    </p>
+
+    <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
+
+    <p>If you have any questions, simply reply to this email.</p>
+
+    <p>
+        Thanks,<br>
+        <strong>{{ site_name }}</strong>
+    </p>
+
+</body>
+</html>
+
