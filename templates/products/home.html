@@ -5,17 +5,14 @@
 
 {% block content %}
 <!-- Hero Section -->
-<section class="hero-section bg-primary text-white rounded-3 p-5 mb-5">
+<section class="hero-section mb-5">
     <div class="row align-items-center">
-        <div class="col-md-6">
-            <h1 class="display-4 fw-bold mb-3">Welcome to ShopEase</h1>
-            <p class="lead mb-4">Discover amazing products at unbeatable prices. Shop with confidence and enjoy fast delivery.</p>
-            <a href="{% url 'products:product_list' %}" class="btn btn-light btn-lg">
-                <i class="bi bi-bag me-2"></i>Shop Now
+        <div class="col-lg-8">
+            <h1>Elevate Your Shopping Experience.</h1>
+            <p class="lead">Discover curated collections of premium products. Fast shipping, secure checkout, and unparalleled customer service.</p>
+            <a href="{% url 'products:product_list' %}" class="btn btn-primary btn-lg mt-2">
+                Shop Collection <i class="bi bi-arrow-right ms-2"></i>
             </a>
-        </div>
-        <div class="col-md-6 text-center">
-            <i class="bi bi-shop display-1"></i>
         </div>
     </div>
 </section>
@@ -30,14 +27,10 @@
     <div class="row g-4">
         {% for category in categories %}
         <div class="col-6 col-md-4 col-lg-2">
-            <a href="{% url 'products:category' category.slug %}" class="text-decoration-none">
-                <div class="card h-100 text-center hover-shadow">
-                    <div class="card-body">
-                        <i class="bi bi-collection display-6 text-primary mb-2"></i>
-                        <h6 class="card-title mb-0">{{ category.name }}</h6>
-                        <small class="text-muted">{{ category.product_count }} items</small>
-                    </div>
-                </div>
+            <a href="{% url 'products:category' category.slug %}" class="category-card">
+                <i class="bi bi-grid-1x2"></i>
+                <h6>{{ category.name }}</h6>
+                <small>{{ category.product_count }} items</small>
             </a>
         </div>
         {% endfor %}
@@ -80,25 +73,25 @@
 {% endif %}
 
 <!-- Features Section -->
-<section class="bg-light rounded-3 p-5 mb-5">
+<section class="features-section mb-5">
     <div class="row text-center g-4">
         <div class="col-md-3">
-            <i class="bi bi-truck display-4 text-primary mb-3"></i>
+            <i class="bi bi-box-seam"></i>
             <h5>Free Shipping</h5>
             <p class="text-muted mb-0">On orders over $50</p>
         </div>
         <div class="col-md-3">
-            <i class="bi bi-shield-check display-4 text-primary mb-3"></i>
+            <i class="bi bi-shield-check"></i>
             <h5>Secure Payment</h5>
             <p class="text-muted mb-0">100% secure checkout</p>
         </div>
         <div class="col-md-3">
-            <i class="bi bi-arrow-repeat display-4 text-primary mb-3"></i>
+            <i class="bi bi-arrow-counterclockwise"></i>
             <h5>Easy Returns</h5>
             <p class="text-muted mb-0">30-day return policy</p>
         </div>
         <div class="col-md-3">
-            <i class="bi bi-headset display-4 text-primary mb-3"></i>
+            <i class="bi bi-headset"></i>
             <h5>24/7 Support</h5>
             <p class="text-muted mb-0">Dedicated support team</p>
         </div>
