@@ -13,6 +13,21 @@ class RedisClient:
             db=0
         )
 
+    def enqueue(self, queue_name, data):
+        self.client.lpush(
+            queue_name,
+            json.dumps(data)
+        )
+
+    def dequeue(self, queue_name):
+        item = self.client.brpop(queue_name)
+
+        if item:
+            _, value = item
+            return json.loads(value)
+
+        return None
+
     def get(self, key):
         value = self.client.get(key)
 
