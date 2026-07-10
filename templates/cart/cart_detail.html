@@ -3,82 +3,67 @@
 {% block title %}Shopping Cart - ShopEase{% endblock %}
 
 {% block content %}
-<nav aria-label="breadcrumb" class="mb-4">
+<nav aria-label="breadcrumb" class="mb-3">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{% url 'products:home' %}">Home</a></li>
         <li class="breadcrumb-item active">Shopping Cart</li>
     </ol>
 </nav>
 
-<h1 class="mb-4"><i class="bi bi-cart3 me-2"></i>Shopping Cart</h1>
+<div class="page-header mb-4">
+    <h1 class="page-title">Shopping Cart</h1>
+    {% if cart|length > 0 %}
+    <p class="page-subtitle text-muted">{{ cart|length }} item{{ cart|length|pluralize }} in your cart</p>
+    {% endif %}
+</div>
 
 {% if cart|length > 0 %}
-<div class="row">
+<div class="row g-5">
     <!-- Cart Items -->
-    <div class="col-lg-8 mb-4">
-        <div class="card">
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Product</th>
-                                <th class="text-center" style="width: 150px;">Quantity</th>
-                                <th class="text-end" style="width: 120px;">Price</th>
-                                <th class="text-end" style="width: 120px;">Total</th>
-                                <th style="width: 50px;"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for item in cart %}
-                            <tr>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        {% if item.product.image %}
-                                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="me-3" style="width: 60px; height: 60px; object-fit: cover;">
-                                        {% else %}
-                                        <div class="bg-light d-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px;">
-                                            <i class="bi bi-image text-muted"></i>
-                                        </div>
-                                        {% endif %}
-                                        <div>
-                                            <a href="{{ item.product.get_absolute_url }}" class="text-decoration-none fw-bold">{{ item.product.name }}</a>
-                                            <br>
-                                            <small class="text-muted">{{ item.product.category.name }}</small>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="text-center align-middle">
-                                    <form action="{% url 'cart:cart_update' item.product.id %}" method="POST" class="d-inline">
-                                        {% csrf_token %}
-                                        <div class="input-group input-group-sm" style="width: 120px; margin: 0 auto;">
-                                            <button type="button" class="btn btn-outline-secondary btn-qty-minus">-</button>
-                                            <input type="number" name="quantity" class="form-control text-center qty-input" value="{{ item.quantity }}" min="1" max="{{ item.product.stock }}">
-                                            <button type="button" class="btn btn-outline-secondary btn-qty-plus">+</button>
-                                        </div>
-                                        <button type="submit" class="btn btn-link btn-sm p-0 mt-1">Update</button>
-                                    </form>
-                                </td>
-                                <td class="text-end align-middle">${{ item.price }}</td>
-                                <td class="text-end align-middle fw-bold">${{ item.total_price }}</td>
-                                <td class="align-middle">
-                                    <form action="{% url 'cart:cart_remove' item.product.id %}" method="POST">
-                                        {% csrf_token %}
-                                        <button type="submit" class="btn btn-link text-danger p-0" title="Remove">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+    <div class="col-lg-8">
+        <div class="cart-items">
+            {% for item in cart %}
+            <div class="cart-item" id="cart-item-{{ item.product.id }}">
+                <div class="cart-item-image">
+                    {% if item.product.image %}
+                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                    {% else %}
+                    <div class="cart-item-placeholder"><i class="bi bi-image"></i></div>
+                    {% endif %}
+                </div>
+                <div class="cart-item-details">
+                    <div class="cart-item-info">
+                        <a href="{{ item.product.get_absolute_url }}" class="cart-item-name">{{ item.product.name }}</a>
+                        <span class="cart-item-category">{{ item.product.category.name }}</span>
+                    </div>
+                    <div class="cart-item-actions">
+                        <form action="{% url 'cart:cart_update' item.product.id %}" method="POST" class="cart-qty-form">
+                            {% csrf_token %}
+                            <div class="quantity-selector quantity-selector-sm">
+                                <button type="button" class="qty-btn qty-minus btn-qty-minus"><i class="bi bi-dash"></i></button>
+                                <input type="number" name="quantity" class="qty-input" value="{{ item.quantity }}" min="1" max="{{ item.product.stock }}">
+                                <button type="button" class="qty-btn qty-plus btn-qty-plus"><i class="bi bi-plus"></i></button>
+                            </div>
+                            <button type="submit" class="btn btn-ghost btn-sm">Update</button>
+                        </form>
+                        <div class="cart-item-price">
+                            <span class="cart-item-total">${{ item.total_price }}</span>
+                            <span class="cart-item-unit">${{ item.price }} each</span>
+                        </div>
+                        <form action="{% url 'cart:cart_remove' item.product.id %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-remove" title="Remove item">
+                                <i class="bi bi-x-lg"></i>
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
+            {% endfor %}
         </div>
 
-        <div class="d-flex justify-content-between mt-3">
-            <a href="{% url 'products:product_list' %}" class="btn btn-outline-primary">
+        <div class="mt-4">
+            <a href="{% url 'products:product_list' %}" class="btn btn-outline-secondary">
                 <i class="bi bi-arrow-left me-2"></i>Continue Shopping
             </a>
         </div>
@@ -86,55 +71,43 @@
 
     <!-- Order Summary -->
     <div class="col-lg-4">
-        <div class="card">
-            <div class="card-header bg-primary text-white">
-                <h5 class="mb-0"><i class="bi bi-receipt me-2"></i>Order Summary</h5>
+        <div class="order-summary" id="order-summary">
+            <h5 class="summary-title">Order Summary</h5>
+
+            <div class="summary-row">
+                <span>Subtotal</span>
+                <span>${{ cart.get_total_price }}</span>
             </div>
-            <div class="card-body">
-                <div class="d-flex justify-content-between mb-2">
-                    <span>Subtotal ({{ cart|length }} items)</span>
-                    <span>${{ cart.get_total_price }}</span>
-                </div>
-                <div class="d-flex justify-content-between mb-2">
-                    <span>Shipping</span>
-                    <span class="text-success">Free</span>
-                </div>
-                <hr>
-                <div class="d-flex justify-content-between mb-3">
-                    <span class="fw-bold fs-5">Total</span>
-                    <span class="fw-bold fs-5 text-primary">${{ cart.get_total_price }}</span>
-                </div>
-
-                <a href="{% url 'orders:checkout' %}" class="btn btn-primary btn-lg w-100">
-                    <i class="bi bi-lock me-2"></i>Proceed to Checkout
-                </a>
-
-                <div class="text-center mt-3">
-                    <small class="text-muted">
-                        <i class="bi bi-shield-check me-1"></i>Secure Checkout
-                    </small>
-                </div>
+            <div class="summary-row">
+                <span>Shipping</span>
+                <span class="text-success">Free</span>
             </div>
-        </div>
 
-        <!-- Accepted Payment Methods -->
-        <div class="card mt-3">
-            <div class="card-body text-center">
-                <small class="text-muted d-block mb-2">We Accept</small>
-                <i class="bi bi-credit-card fs-4 me-2 text-primary"></i>
-                <i class="bi bi-paypal fs-4 me-2 text-primary"></i>
-                <i class="bi bi-wallet2 fs-4 text-primary"></i>
+            <div class="summary-divider"></div>
+
+            <div class="summary-row summary-total">
+                <span>Total</span>
+                <span>${{ cart.get_total_price }}</span>
+            </div>
+
+            <a href="{% url 'orders:checkout' %}" class="btn btn-primary btn-lg w-100 mt-3" id="checkout-btn">
+                Proceed to Checkout
+            </a>
+
+            <div class="summary-secure">
+                <i class="bi bi-shield-lock-fill"></i>
+                <span>Secure 256-bit SSL Checkout</span>
             </div>
         </div>
     </div>
 </div>
 {% else %}
-<div class="text-center py-5">
-    <i class="bi bi-cart-x display-1 text-muted mb-4"></i>
+<div class="empty-state">
+    <i class="bi bi-bag"></i>
     <h3>Your cart is empty</h3>
-    <p class="text-muted mb-4">Looks like you haven't added any items to your cart yet.</p>
-    <a href="{% url 'products:product_list' %}" class="btn btn-primary btn-lg">
-        <i class="bi bi-bag me-2"></i>Start Shopping
+    <p>Looks like you haven't added any items to your cart yet.</p>
+    <a href="{% url 'products:product_list' %}" class="btn btn-primary btn-lg" id="start-shopping-btn">
+        Start Shopping
     </a>
 </div>
 {% endif %}
@@ -143,28 +116,21 @@
 {% block extra_js %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Quantity buttons
     document.querySelectorAll('.btn-qty-minus').forEach(function(btn) {
         btn.addEventListener('click', function() {
-            var input = this.parentElement.querySelector('.qty-input');
+            var input = this.closest('.quantity-selector').querySelector('.qty-input');
             var value = parseInt(input.value);
-            if (value > 1) {
-                input.value = value - 1;
-            }
+            if (value > 1) input.value = value - 1;
         });
     });
-
     document.querySelectorAll('.btn-qty-plus').forEach(function(btn) {
         btn.addEventListener('click', function() {
-            var input = this.parentElement.querySelector('.qty-input');
+            var input = this.closest('.quantity-selector').querySelector('.qty-input');
             var value = parseInt(input.value);
             var max = parseInt(input.getAttribute('max'));
-            if (value < max) {
-                input.value = value + 1;
-            }
+            if (value < max) input.value = value + 1;
         });
     });
 });
 </script>
 {% endblock %}
-

@@ -1,38 +1,59 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}ShopEase - Your One-Stop Online Shop{% endblock %}
+{% block title %}ShopEase — Premium Online Shopping{% endblock %}
 
 {% block content %}
 <!-- Hero Section -->
-<section class="hero-section mb-5">
-    <div class="row align-items-center">
-        <div class="col-lg-8">
-            <h1>Elevate Your Shopping Experience.</h1>
-            <p class="lead">Discover curated collections of premium products. Fast shipping, secure checkout, and unparalleled customer service.</p>
-            <a href="{% url 'products:product_list' %}" class="btn btn-primary btn-lg mt-2">
-                Shop Collection <i class="bi bi-arrow-right ms-2"></i>
+<section class="hero" id="hero-section">
+    <div class="hero-content">
+        <span class="hero-badge">New Season Collection</span>
+        <h1 class="hero-title">Discover Products<br>You'll Love</h1>
+        <p class="hero-subtitle">Curated collections of premium products with fast shipping, secure checkout, and unparalleled customer service.</p>
+        <div class="hero-actions">
+            <a href="{% url 'products:product_list' %}" class="btn btn-primary btn-lg" id="shop-now-btn">
+                Shop Now <i class="bi bi-arrow-right ms-2"></i>
             </a>
+            <a href="#categories-section" class="btn btn-outline-secondary btn-lg" id="explore-btn">
+                Explore Categories
+            </a>
+        </div>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <strong>2K+</strong>
+                <span>Products</span>
+            </div>
+            <div class="hero-stat">
+                <strong>500+</strong>
+                <span>Reviews</span>
+            </div>
+            <div class="hero-stat">
+                <strong>Free</strong>
+                <span>Shipping</span>
+            </div>
         </div>
     </div>
 </section>
 
 <!-- Categories Section -->
 {% if categories %}
-<section class="mb-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="mb-0">Shop by Category</h2>
-        <a href="{% url 'products:product_list' %}" class="btn btn-outline-primary">View All</a>
-    </div>
-    <div class="row g-4">
-        {% for category in categories %}
-        <div class="col-6 col-md-4 col-lg-2">
-            <a href="{% url 'products:category' category.slug %}" class="category-card">
-                <i class="bi bi-grid-1x2"></i>
-                <h6>{{ category.name }}</h6>
-                <small>{{ category.product_count }} items</small>
-            </a>
+<section class="section" id="categories-section">
+    <div class="section-header">
+        <div>
+            <h2 class="section-title">Shop by Category</h2>
+            <p class="section-subtitle">Browse our curated collections</p>
         </div>
+        <a href="{% url 'products:product_list' %}" class="btn btn-outline-secondary btn-sm">View All</a>
+    </div>
+    <div class="category-grid">
+        {% for category in categories %}
+        <a href="{% url 'products:category' category.slug %}" class="category-card" id="category-{{ category.slug }}">
+            <div class="category-icon">
+                <i class="bi bi-grid-1x2"></i>
+            </div>
+            <h6 class="category-name">{{ category.name }}</h6>
+            <span class="category-count">{{ category.product_count }} items</span>
+        </a>
         {% endfor %}
     </div>
 </section>
@@ -40,10 +61,13 @@
 
 <!-- Featured Products -->
 {% if featured_products %}
-<section class="mb-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="mb-0"><i class="bi bi-star-fill text-warning me-2"></i>Featured Products</h2>
-        <a href="{% url 'products:product_list' %}" class="btn btn-outline-primary">View All</a>
+<section class="section">
+    <div class="section-header">
+        <div>
+            <h2 class="section-title">Featured Products</h2>
+            <p class="section-subtitle">Hand-picked selections just for you</p>
+        </div>
+        <a href="{% url 'products:product_list' %}" class="btn btn-outline-secondary btn-sm">View All</a>
     </div>
     <div class="row g-4">
         {% for product in featured_products %}
@@ -57,10 +81,13 @@
 
 <!-- Latest Products -->
 {% if latest_products %}
-<section class="mb-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="mb-0"><i class="bi bi-clock me-2"></i>Latest Arrivals</h2>
-        <a href="{% url 'products:product_list' %}" class="btn btn-outline-primary">View All</a>
+<section class="section">
+    <div class="section-header">
+        <div>
+            <h2 class="section-title">New Arrivals</h2>
+            <p class="section-subtitle">The latest additions to our collection</p>
+        </div>
+        <a href="{% url 'products:product_list' %}" class="btn btn-outline-secondary btn-sm">View All</a>
     </div>
     <div class="row g-4">
         {% for product in latest_products %}
@@ -72,30 +99,29 @@
 </section>
 {% endif %}
 
-<!-- Features Section -->
-<section class="features-section mb-5">
-    <div class="row text-center g-4">
-        <div class="col-md-3">
-            <i class="bi bi-box-seam"></i>
-            <h5>Free Shipping</h5>
-            <p class="text-muted mb-0">On orders over $50</p>
+<!-- Trust Badges -->
+<section class="trust-section">
+    <div class="trust-grid">
+        <div class="trust-item">
+            <div class="trust-icon"><i class="bi bi-truck"></i></div>
+            <h6>Free Shipping</h6>
+            <p>On orders over $50</p>
         </div>
-        <div class="col-md-3">
-            <i class="bi bi-shield-check"></i>
-            <h5>Secure Payment</h5>
-            <p class="text-muted mb-0">100% secure checkout</p>
+        <div class="trust-item">
+            <div class="trust-icon"><i class="bi bi-shield-check"></i></div>
+            <h6>Secure Payment</h6>
+            <p>256-bit SSL encryption</p>
         </div>
-        <div class="col-md-3">
-            <i class="bi bi-arrow-counterclockwise"></i>
-            <h5>Easy Returns</h5>
-            <p class="text-muted mb-0">30-day return policy</p>
+        <div class="trust-item">
+            <div class="trust-icon"><i class="bi bi-arrow-counterclockwise"></i></div>
+            <h6>Easy Returns</h6>
+            <p>30-day return policy</p>
         </div>
-        <div class="col-md-3">
-            <i class="bi bi-headset"></i>
-            <h5>24/7 Support</h5>
-            <p class="text-muted mb-0">Dedicated support team</p>
+        <div class="trust-item">
+            <div class="trust-icon"><i class="bi bi-headset"></i></div>
+            <h6>24/7 Support</h6>
+            <p>Dedicated support team</p>
         </div>
     </div>
 </section>
 {% endblock %}
-
