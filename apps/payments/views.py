@@ -5,7 +5,6 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from apps.orders.models import Order
-from apps.orders.emails import send_order_confirmation_email
 from apps.cart.cart import Cart
 
 
@@ -113,7 +112,7 @@ def payment_success(request):
 
             # Send order confirmation email
             print(f"[PAYMENT] Sending confirmation email to: {order.email}")
-            from notifications.tasks.send_mail import send_order_confirmation_email_task
+            from apps.payments.tasks import send_order_confirmation_email_task
 
             send_order_confirmation_email_task.delay(order.id)
 
