@@ -113,8 +113,9 @@ def payment_success(request):
 
             # Send order confirmation email
             print(f"[PAYMENT] Sending confirmation email to: {order.email}")
-            email_result = send_order_confirmation_email(order)
-            print(f"[PAYMENT] Email send result: {email_result}")
+            from notifications.tasks.send_mail import send_order_confirmation_email_task
+
+            send_order_confirmation_email_task.delay(order.id)
 
             return render(request, 'payments/success.html', {'order': order})
 

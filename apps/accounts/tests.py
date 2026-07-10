@@ -5,7 +5,7 @@ from django.urls import reverse
 
 
 class PasswordResetFlowTests(TestCase):
-    @override_settings(EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend')
+    @override_settings(EMAIL_BACKEND='django.notifications.mail.backends.locmem.EmailBackend')
     def test_password_reset_email_and_confirm_link(self):
         user = User.objects.create_user(username='alice', email='alice@example.com', password='oldpass123')
 
