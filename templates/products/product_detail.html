@@ -4,7 +4,7 @@
 {% block title %}{{ product.name }} - ShopEase{% endblock %}
 
 {% block content %}
-<nav aria-label="breadcrumb" class="mb-4">
+<nav aria-label="breadcrumb" class="mb-3">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{% url 'products:home' %}">Home</a></li>
         <li class="breadcrumb-item"><a href="{% url 'products:category' product.category.slug %}">{{ product.category.name }}</a></li>
@@ -12,90 +12,94 @@
     </ol>
 </nav>
 
-<div class="row">
-    <!-- Product Image -->
-    <div class="col-md-6 mb-4">
-        <div class="card">
-            {% if product.image %}
-            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="max-height: 500px; object-fit: contain;">
-            {% else %}
-            <div class="bg-light d-flex align-items-center justify-content-center" style="height: 400px;">
-                <i class="bi bi-image text-muted" style="font-size: 5rem;"></i>
+<div class="product-detail" id="product-detail">
+    <div class="row g-5">
+        <!-- Product Image -->
+        <div class="col-lg-6">
+            <div class="product-gallery">
+                {% if product.image %}
+                <div class="product-main-image">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" id="main-product-image">
+                </div>
+                {% else %}
+                <div class="product-main-image product-no-image">
+                    <i class="bi bi-image"></i>
+                </div>
+                {% endif %}
             </div>
-            {% endif %}
-        </div>
-    </div>
-
-    <!-- Product Details -->
-    <div class="col-md-6">
-        <h1 class="mb-2">{{ product.name }}</h1>
-        <p class="text-muted mb-3">
-            <a href="{% url 'products:category' product.category.slug %}" class="text-decoration-none">
-                <i class="bi bi-tag me-1"></i>{{ product.category.name }}
-            </a>
-        </p>
-
-        <!-- Price -->
-        <div class="mb-4">
-            <span class="fs-2 fw-bold text-primary">${{ product.price }}</span>
-            {% if product.compare_price %}
-            <span class="text-muted text-decoration-line-through ms-2 fs-5">${{ product.compare_price }}</span>
-            <span class="badge bg-danger ms-2">Save {{ product.discount_percentage }}%</span>
-            {% endif %}
         </div>
 
-        <!-- Stock Status -->
-        <div class="mb-4">
-            {% if product.is_in_stock %}
-            <span class="badge bg-success fs-6"><i class="bi bi-check-circle me-1"></i>In Stock ({{ product.stock }} available)</span>
-            {% else %}
-            <span class="badge bg-danger fs-6"><i class="bi bi-x-circle me-1"></i>Out of Stock</span>
-            {% endif %}
-        </div>
+        <!-- Product Info -->
+        <div class="col-lg-6">
+            <div class="product-info">
+                <a href="{% url 'products:category' product.category.slug %}" class="product-category-link">
+                    {{ product.category.name }}
+                </a>
 
-        <!-- Description -->
-        <div class="mb-4">
-            <h5>Description</h5>
-            <p>{{ product.description|linebreaks }}</p>
-        </div>
+                <h1 class="product-name">{{ product.name }}</h1>
 
-        <!-- Add to Cart Form -->
-        {% if product.is_in_stock %}
-        <form action="{% url 'cart:cart_add' product.id %}" method="POST" class="mb-4">
-            {% csrf_token %}
-            <div class="row g-3 align-items-center">
-                <div class="col-auto">
-                    <label for="quantity" class="col-form-label">Quantity:</label>
+                <!-- Price -->
+                <div class="product-price-block">
+                    <span class="product-current-price">${{ product.price }}</span>
+                    {% if product.compare_price %}
+                    <span class="product-original-price">${{ product.compare_price }}</span>
+                    <span class="product-discount">Save {{ product.discount_percentage }}%</span>
+                    {% endif %}
                 </div>
-                <div class="col-auto">
-                    <input type="number" name="quantity" id="quantity" class="form-control" value="1" min="1" max="{{ product.stock }}" style="width: 80px;">
+
+                <!-- Stock Status -->
+                <div class="product-stock">
+                    {% if product.is_in_stock %}
+                    <span class="stock-badge stock-in"><i class="bi bi-check-circle-fill"></i> In Stock ({{ product.stock }} available)</span>
+                    {% else %}
+                    <span class="stock-badge stock-out"><i class="bi bi-x-circle-fill"></i> Out of Stock</span>
+                    {% endif %}
                 </div>
-                <div class="col-auto">
-                    <button type="submit" class="btn btn-primary btn-lg">
-                        <i class="bi bi-cart-plus me-2"></i>Add to Cart
+
+                <!-- Description -->
+                <div class="product-description">
+                    <h6>Description</h6>
+                    <div class="desc-content">{{ product.description|linebreaks }}</div>
+                </div>
+
+                <!-- Add to Cart Form -->
+                {% if product.is_in_stock %}
+                <form action="{% url 'cart:cart_add' product.id %}" method="POST" class="product-add-form" id="add-to-cart-form">
+                    {% csrf_token %}
+                    <div class="quantity-selector">
+                        <button type="button" class="qty-btn qty-minus" id="qty-minus">
+                            <i class="bi bi-dash"></i>
+                        </button>
+                        <input type="number" name="quantity" id="quantity" class="qty-input" value="1" min="1" max="{{ product.stock }}">
+                        <button type="button" class="qty-btn qty-plus" id="qty-plus">
+                            <i class="bi bi-plus"></i>
+                        </button>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg btn-add-to-cart" id="add-to-cart-btn">
+                        <i class="bi bi-bag-plus me-2"></i>Add to Cart
                     </button>
-                </div>
-            </div>
-        </form>
-        {% else %}
-        <button class="btn btn-secondary btn-lg mb-4" disabled>
-            <i class="bi bi-x-circle me-2"></i>Out of Stock
-        </button>
-        {% endif %}
+                </form>
+                {% else %}
+                <button class="btn btn-secondary btn-lg w-100" disabled>
+                    Out of Stock
+                </button>
+                {% endif %}
 
-        <!-- Features -->
-        <div class="row text-center border-top pt-4">
-            <div class="col-4">
-                <i class="bi bi-truck text-primary fs-4"></i>
-                <p class="small mb-0">Free Shipping</p>
-            </div>
-            <div class="col-4">
-                <i class="bi bi-shield-check text-primary fs-4"></i>
-                <p class="small mb-0">Secure Payment</p>
-            </div>
-            <div class="col-4">
-                <i class="bi bi-arrow-repeat text-primary fs-4"></i>
-                <p class="small mb-0">Easy Returns</p>
+                <!-- Trust Features -->
+                <div class="product-trust">
+                    <div class="trust-mini">
+                        <i class="bi bi-truck"></i>
+                        <span>Free Shipping</span>
+                    </div>
+                    <div class="trust-mini">
+                        <i class="bi bi-shield-check"></i>
+                        <span>Secure Payment</span>
+                    </div>
+                    <div class="trust-mini">
+                        <i class="bi bi-arrow-counterclockwise"></i>
+                        <span>Easy Returns</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -103,8 +107,13 @@
 
 <!-- Related Products -->
 {% if related_products %}
-<section class="mt-5">
-    <h3 class="mb-4">Related Products</h3>
+<section class="section mt-5">
+    <div class="section-header">
+        <div>
+            <h2 class="section-title">You May Also Like</h2>
+            <p class="section-subtitle">Similar products you might enjoy</p>
+        </div>
+    </div>
     <div class="row g-4">
         {% for product in related_products %}
         <div class="col-6 col-md-3">
@@ -114,5 +123,27 @@
     </div>
 </section>
 {% endif %}
+
 {% endblock %}
 
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const qtyInput = document.getElementById('quantity');
+    const minusBtn = document.getElementById('qty-minus');
+    const plusBtn = document.getElementById('qty-plus');
+
+    if (minusBtn && plusBtn && qtyInput) {
+        minusBtn.addEventListener('click', function() {
+            let val = parseInt(qtyInput.value);
+            if (val > 1) qtyInput.value = val - 1;
+        });
+        plusBtn.addEventListener('click', function() {
+            let val = parseInt(qtyInput.value);
+            let max = parseInt(qtyInput.getAttribute('max'));
+            if (val < max) qtyInput.value = val + 1;
+        });
+    }
+});
+</script>
+{% endblock %}

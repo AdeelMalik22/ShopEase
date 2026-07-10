@@ -88,10 +88,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Image lazy loading fallback
-    if ('loading' in HTMLImageElement.prototype) {
+    if (!('loading' in HTMLImageElement.prototype)) {
         const images = document.querySelectorAll('img[loading="lazy"]');
         images.forEach(img => {
-            img.src = img.dataset.src;
+            if (img.dataset.src) {
+                img.src = img.dataset.src;
+            }
         });
     }
 
