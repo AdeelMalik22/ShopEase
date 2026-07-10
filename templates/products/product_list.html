@@ -12,13 +12,10 @@
 
 <div class="row">
     <!-- Sidebar Filters -->
-    <div class="col-lg-3 mb-4">
-        <div class="card">
-            <div class="card-header bg-primary text-white">
-                <i class="bi bi-funnel me-2"></i>Filters
-            </div>
-            <div class="card-body">
-                <form method="GET" action="">
+    <div class="col-lg-3 mb-4 sidebar-filters">
+        <div class="mb-4">
+            <h5 class="fw-bold mb-4">Filters</h5>
+            <form method="GET" action="">
                     <!-- Categories -->
                     <div class="mb-3">
                         <h6 class="fw-bold">Categories</h6>
@@ -56,9 +53,8 @@
                     </div>
 
                     <button type="submit" class="btn btn-primary w-100 mb-2">Apply Filters</button>
-                    <a href="{% url 'products:product_list' %}" class="btn btn-outline-secondary w-100">Clear Filters</a>
+                    <a href="{% url 'products:product_list' %}" class="btn btn-outline-primary w-100">Clear Filters</a>
                 </form>
-            </div>
         </div>
     </div>
 
